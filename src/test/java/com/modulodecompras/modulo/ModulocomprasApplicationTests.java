@@ -1,10 +1,10 @@
-package br.com.base.Compras;
+package com.modulodecompras.modulo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ComprasApplicationTests {
+class ModulocomprasApplicationTests {
 
 	@Test
 	void contextLoads() {
