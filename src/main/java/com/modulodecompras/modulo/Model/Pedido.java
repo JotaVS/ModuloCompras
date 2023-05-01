@@ -1,9 +1,13 @@
 package com.modulodecompras.modulo.Model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 import java.util.List;
 
