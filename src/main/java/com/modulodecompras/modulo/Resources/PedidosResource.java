@@ -32,7 +32,7 @@ public class PedidosResource {
         return ResponseEntity.ok().body(dto);
 
     }
-    @PostMapping(value = "/pedidos")
+    @PostMapping
     public  ResponseEntity<PedidoDTO> insert(@RequestBody PedidoDTO dto){
         dto = service.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
