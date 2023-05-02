@@ -22,5 +22,7 @@ public class Pedido {
     private long id;
     private String codPedido;
     private String produtos;
+
+
 }
 
