@@ -12,40 +12,41 @@ import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="Fornecedor")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Fornecedores implements Serializable {//essa classe implementa o serializable
-    private static final long serialVersionUID = 1L; //definição do id do serializable, conversao de objetos java para bytes
-    //para serem salvos no banco de dados.
+public class Fornecedores {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
-    private UUID id;
+    @NotNull
+    private String nome;
 
-    @Column(nullable=false, unique=true, length=15)
+    @Column(unique=true, length=15)
     private String telefone;
 
-    @Column(nullable=false, unique=true, length=14)
+    @Column(unique=true, length=14)
     private String cnpj;
 
-    @Column(nullable=false, unique=true, length=15)
+    @Column(length=15)
     private String rua;
 
-    @Column(nullable=false, unique=true, length=15)
+    @Column(length=15)
     private String bairro;
 
-    @Column(nullable=false, unique=true, length=5)
+    @Column(length=5)
     private String numero;
 
-    @Column(nullable=false, unique=true, length=20)
+    @Column(length=20)
     private String cidade;
 
-    @Column(nullable=false, unique=true, length=20)
+    @Column(length=20)
     private String estado;
 
 
