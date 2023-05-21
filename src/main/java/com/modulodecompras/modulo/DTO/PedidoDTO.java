@@ -12,13 +12,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class PedidoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    private  Long id;
+    private  int id;
     private String codPedido;
     private String produtos;
     public PedidoDTO(Pedido entity){
         this.id = entity.getId();
-        this.codPedido= entity.getCodPedido();
-        this.produtos = entity.getProdutos();
+//        this.codPedido= entity.getCodPedido();
+//        this.produtos = entity.getProdutos();
 
     }
 

@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.persistence.*;
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -20,14 +22,23 @@ public class Produtos {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @NotNull
+//    @NotNull
     private String nome;
 
-    @NotNull
+//    @NotNull
     private String descricao;
 
-    @NotNull
-    private String fornecedor;
+    private float valorUnidade;
+
+    @ManyToOne
+    @JoinColumn(name = "fornecedor_id")
+    private Fornecedores fornecedores;
+
+    @OneToMany(mappedBy = "produtos")
+    private List<Estoque> estoque;
+
+    @ManyToMany(mappedBy = "produtosped")
+    private List<Pedido> pedido;
 
 }
 

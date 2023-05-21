@@ -34,8 +34,8 @@ public class PedidosService {
     @Transactional
     public PedidoDTO insert(PedidoDTO dto) {
         Pedido entity = new Pedido();
-        entity.setCodPedido(dto.getCodPedido());
-        entity.setProdutos(dto.getProdutos());
+//        entity.setCodPedido(dto.getCodPedido());
+//        entity.setProdutos(dto.getProdutos());
         entity = repository.save(entity);
         return new PedidoDTO(entity);
     }

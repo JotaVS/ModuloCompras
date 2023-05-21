@@ -51,13 +51,11 @@ public class FornecedoresService {
             throw new Exception("Fornecedor não encontrado!!");
         }
         f.setNome(fornecedores.getNome());
-        f.setBairro(fornecedores.getBairro());
         f.setCnpj(fornecedores.getCnpj());
-        f.setCidade(fornecedores.getCidade());
-        f.setEstado(fornecedores.getEstado());
-        f.setRua(fornecedores.getRua());
-        f.setNumero(fornecedores.getNumero());
         f.setTelefone(fornecedores.getTelefone());
+        f.setProdutos(fornecedores.getProdutos());
+        f.setPrazoPagamento(fornecedores.getPrazoPagamento());
+        f.setDescontoVolume(fornecedores.getPrazoPagamento());
 
         return fDao.save(f);
     }

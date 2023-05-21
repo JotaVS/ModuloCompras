@@ -51,7 +51,6 @@ public class ProdutoService {
         }
         p.setNome(produtos.getNome());
         p.setDescricao(produtos.getDescricao());
-        p.setFornecedor(produtos.getFornecedor());
 
         return pDao.save(p);
     }

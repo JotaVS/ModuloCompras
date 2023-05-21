@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.persistence.Id;
@@ -15,7 +16,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="Fornecedor")
+@Table(name="Fornecedores")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,20 +35,12 @@ public class Fornecedores {
     @Column(unique=true, length=14)
     private String cnpj;
 
-    @Column(length=15)
-    private String rua;
+    private String descontoVolume;
 
-    @Column(length=15)
-    private String bairro;
+    private String prazoPagamento;
 
-    @Column(length=5)
-    private String numero;
-
-    @Column(length=20)
-    private String cidade;
-
-    @Column(length=20)
-    private String estado;
+    @OneToMany(mappedBy = "fornecedores")
+    private List<Produtos> produtos;
 
 
 }
