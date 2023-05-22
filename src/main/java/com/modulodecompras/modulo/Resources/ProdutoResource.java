@@ -2,6 +2,7 @@ package com.modulodecompras.modulo.Resources;
 
 import com.modulodecompras.modulo.Model.Produtos;
 import com.modulodecompras.modulo.Services.ProdutoService;
+import com.modulodecompras.modulo.Services.dto.ProdutoEstoqueDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +44,14 @@ public class ProdutoResource {
     }
 
     @GetMapping("/{id}")
-    public Produtos getProdutoById(@PathVariable int id){
-        return pServ.buscaProdutoPeloId(id);
+    public ResponseEntity<?> getProdutoById(@PathVariable int id){
+
+
+        try{
+            return ResponseEntity.ok(pServ.buscaProdutoPeloIdDto(id));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @GetMapping()

@@ -14,11 +14,11 @@ import javax.persistence.*;
 public class Estoque {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "produto_id")
+    @JoinColumn(name = "IdProduto")
     private Produtos produtos;
 
     private int quantidade;

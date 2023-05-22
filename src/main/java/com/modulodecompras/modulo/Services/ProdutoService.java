@@ -1,7 +1,9 @@
 package com.modulodecompras.modulo.Services;
 
+import com.modulodecompras.modulo.Model.Estoque;
 import com.modulodecompras.modulo.Model.Produtos;
 import com.modulodecompras.modulo.Services.dao.ProdutoDao;
+import com.modulodecompras.modulo.Services.dto.ProdutoEstoqueDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,13 @@ public class ProdutoService {
     @Autowired
     ProdutoDao pDao;
 
+    @Autowired
+    EstoqueService eServ;
+
     public Produtos saveP(Produtos produtos){
         return pDao.save(produtos);
     }
+
     public Produtos buscaProdutoPeloId(int id){
         Optional<Produtos> op = pDao.findById(id);
 
@@ -25,6 +31,28 @@ public class ProdutoService {
         } else{
             return null;
         }
+    }
+
+
+    public ProdutoEstoqueDTO buscaProdutoPeloIdDto(int id) throws Exception{
+        Optional<Produtos> op = pDao.findById(id);
+
+        if (op.isPresent()){
+
+            List<Estoque> est = eServ.buscarEstoquePeloIdProd(id);
+
+            ProdutoEstoqueDTO prodEst = ProdutoEstoqueDTO.builder()
+                    .idProduto(id)
+                    .qtdEstoque(est.get(0).getQuantidade())
+                    .nomeProduto(op.get().getNome())
+                    .precoUnit(op.get().getValorUnidade())
+                    .build();
+
+            return prodEst;
+        } else{
+            throw new Exception("Produto não encontrado!!");
+        }
+
     }
 
     public Produtos buscaProdutoPeloNome(String nome){

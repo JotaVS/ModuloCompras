@@ -1,7 +1,9 @@
 package com.modulodecompras.modulo;
 
+import com.modulodecompras.modulo.Model.Estoque;
 import com.modulodecompras.modulo.Model.Fornecedores;
 import com.modulodecompras.modulo.Model.Produtos;
+import com.modulodecompras.modulo.Services.dao.EstoqueDao;
 import com.modulodecompras.modulo.Services.dao.FornecedoresDao;
 import com.modulodecompras.modulo.Services.dao.ProdutoDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +27,46 @@ public class ModulocomprasApplication implements CommandLineRunner {
 	@Autowired
 	FornecedoresDao fornDao;
 
+	@Autowired
+	EstoqueDao estDao;
+
 	@Override
 	public void run(String... args) throws Exception {
 
+
+		//Inserts para teste de getProdutoById
+		//Inicio
 
 //		Fornecedores f = new Fornecedores();
 //		f.setNome("zezin");
 //
 //		fornDao.save(f);
-////		fornDao.save(f);
 //
 //		Produtos p = new Produtos();
-//		p.setNome("generico");
+//		p.setNome("mouse");
+//		p.setValorUnidade(15.50f);
 //		p.setFornecedores(f);
 //		prodDao.save(p);
+//
+//		Produtos p2 = new Produtos();
+//		p2.setNome("teclado");
+//		p2.setValorUnidade(19.90f);
+//		p2.setFornecedores(f);
+//		prodDao.save(p2);
+//
+//		Estoque e = new Estoque();
+//		e.setQuantidade(15);
+//		e.setProdutos(p);
+//		estDao.save(e);
+//
+//		Estoque e2 = new Estoque();
+//		e2.setQuantidade(10);
+//		e2.setProdutos(p2);
+//		estDao.save(e2);
+
+		//Fim
+
+
 
 
 
