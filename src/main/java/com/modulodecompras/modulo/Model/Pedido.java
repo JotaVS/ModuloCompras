@@ -24,24 +24,14 @@ public class Pedido {
 
     private int valor;
 
-//    @ManyToMany
-//    @JoinTable(name = "pedido-produto",
-//            joinColumns = @JoinColumn(name = "pedido_id"),
-//            inverseJoinColumns = @JoinColumn(name = "produtos_id")
-//    )
-//    private List<Produtos> produtos;
-
-    @ManyToMany
-    @JoinTable(name = "pedido-produtos",
-            joinColumns = @JoinColumn(name = "pedido_id"),
-            inverseJoinColumns = @JoinColumn(name = "produtos_id")
-    )
-    private List<Produtos> produtosped;
-
-
     @OneToMany(mappedBy = "pedido")
     private List<NotaFiscal> notaFiscal;
 
-
+    @ManyToMany
+    @JoinTable(name = "itensPedido",
+            joinColumns = @JoinColumn(name = "pedido_id"),
+            inverseJoinColumns = @JoinColumn(name = "produtos_id")
+    )
+    private List<Produtos> prodPed;
 }
 

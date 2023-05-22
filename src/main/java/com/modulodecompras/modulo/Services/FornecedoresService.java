@@ -53,9 +53,8 @@ public class FornecedoresService {
         f.setNome(fornecedores.getNome());
         f.setCnpj(fornecedores.getCnpj());
         f.setTelefone(fornecedores.getTelefone());
-        f.setProdutos(fornecedores.getProdutos());
         f.setPrazoPagamento(fornecedores.getPrazoPagamento());
-        f.setDescontoVolume(fornecedores.getPrazoPagamento());
+        f.setDescontoVolume(fornecedores.getDescontoVolume());
 
         return fDao.save(f);
     }
