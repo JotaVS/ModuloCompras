@@ -4,6 +4,7 @@ import com.modulodecompras.modulo.Model.Estoque;
 import com.modulodecompras.modulo.Model.Produtos;
 import com.modulodecompras.modulo.Services.dao.ProdutoDao;
 import com.modulodecompras.modulo.Services.dto.ProdutoEstoqueDTO;
+import com.modulodecompras.modulo.Services.dto.VerificarProdutoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,32 @@ public class ProdutoService {
         } else{
             return null;
         }
+    }
+
+    public VerificarProdutoDTO verificarProduto(int id){
+        Optional<Produtos> op = pDao.findById(id);
+
+        if (op.isPresent()){
+            List<Estoque> est = eServ.buscarEstoquePeloIdProd(id);
+
+            VerificarProdutoDTO verProd = VerificarProdutoDTO.builder()
+                    .qtdEstoque(est.get(0).getQuantidade())
+                    .produtoExistente(true)
+                    .build();
+
+            return verProd;
+
+        } else{
+
+            VerificarProdutoDTO verProd = VerificarProdutoDTO.builder()
+                    .qtdEstoque(0)
+                    .produtoExistente(false)
+                    .build();
+            return verProd;
+
+        }
+
+
     }
 
 

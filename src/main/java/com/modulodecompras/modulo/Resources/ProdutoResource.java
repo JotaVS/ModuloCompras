@@ -3,6 +3,7 @@ package com.modulodecompras.modulo.Resources;
 import com.modulodecompras.modulo.Model.Produtos;
 import com.modulodecompras.modulo.Services.ProdutoService;
 import com.modulodecompras.modulo.Services.dto.ProdutoEstoqueDTO;
+import com.modulodecompras.modulo.Services.dto.VerificarProdutoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +53,12 @@ public class ProdutoResource {
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/verificar/{id}") public VerificarProdutoDTO verificarProdutoDTO(@PathVariable int id){
+
+        return (pServ.verificarProduto(id));
+
     }
 
     @GetMapping()
