@@ -34,8 +34,9 @@ public class Produtos {
     @JoinColumn(name = "fornecedor_id")
     private Fornecedores fornecedores;
 
-    @OneToMany(mappedBy = "produtos")
-    private List<Estoque> estoque;
+    @OneToOne(mappedBy = "produtos")
+    private Estoque estoque;
+
 
     @ManyToMany(mappedBy = "prodPed")
     private List<Pedido> pedido;

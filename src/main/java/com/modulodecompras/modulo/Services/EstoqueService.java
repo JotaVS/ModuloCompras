@@ -15,7 +15,7 @@ public class EstoqueService {
 
         public Estoque saveP(Estoque estoque){return estDao.save(estoque);}
 
-    public List<Estoque> buscarEstoquePeloIdProd(int id){
+    public Estoque buscarEstoquePeloIdProd(int id){
 
         return estDao.findByIdProduto(id);
     }

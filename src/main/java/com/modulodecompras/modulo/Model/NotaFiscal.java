@@ -19,8 +19,8 @@ public class NotaFiscal {
 
     private int codNota;
 
-    @ManyToOne
-    @JoinColumn(name = "pedido_id")
+    @OneToOne
+    @JoinColumn(name = "PedidoID")
     private Pedido pedido;
 
 

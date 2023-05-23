@@ -24,8 +24,8 @@ public class Pedido {
 
     private int valor;
 
-    @OneToMany(mappedBy = "pedido")
-    private List<NotaFiscal> notaFiscal;
+    @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private NotaFiscal notaFiscal;
 
     @ManyToMany
     @JoinTable(name = "itensPedido",

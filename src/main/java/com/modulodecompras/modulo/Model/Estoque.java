@@ -17,8 +17,8 @@ public class Estoque {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "IdProduto")
+    @OneToOne
+    @JoinColumn(name = "ProdutoID")
     private Produtos produtos;
 
     private int quantidade;

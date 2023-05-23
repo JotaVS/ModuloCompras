@@ -38,10 +38,10 @@ public class ProdutoService {
         Optional<Produtos> op = pDao.findById(id);
 
         if (op.isPresent()){
-            List<Estoque> est = eServ.buscarEstoquePeloIdProd(id);
+            Estoque est = eServ.buscarEstoquePeloIdProd(id);
 
             VerificarProdutoDTO verProd = VerificarProdutoDTO.builder()
-                    .qtdEstoque(est.get(0).getQuantidade())
+                    .qtdEstoque(est.getQuantidade())
                     .produtoExistente(true)
                     .build();
 
@@ -66,11 +66,11 @@ public class ProdutoService {
 
         if (op.isPresent()){
 
-            List<Estoque> est = eServ.buscarEstoquePeloIdProd(id);
+            Estoque est = eServ.buscarEstoquePeloIdProd(id);
 
             ProdutoEstoqueDTO prodEst = ProdutoEstoqueDTO.builder()
                     .idProduto(id)
-                    .qtdEstoque(est.get(0).getQuantidade())
+                    .qtdEstoque(est.getQuantidade())
                     .nomeProduto(op.get().getNome())
                     .precoUnit(op.get().getValorUnidade())
                     .build();
