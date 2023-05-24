@@ -41,6 +41,8 @@ public class Fornecedores {
 
     @OneToMany(mappedBy = "fornecedores")
     private List<Produtos> produtos;
+    private float descontoLote;
+
 
 
 }

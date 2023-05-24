@@ -1,6 +1,7 @@
 package com.modulodecompras.modulo.Services;
 
 import com.modulodecompras.modulo.DTO.PedidoDTO;
+import com.modulodecompras.modulo.Model.Fornecedores;
 import com.modulodecompras.modulo.Model.ItemPedido;
 import com.modulodecompras.modulo.Model.Pedido;
 import com.modulodecompras.modulo.Repository.PedidosRepository;
@@ -58,7 +59,7 @@ public class PedidosService {
             float valorCompra = produto.getValorCompra();
             int quantidade = produto.getQuantidadeProduto();
 
-            float subtotal = valorCompra * quantidade;
+            float subtotal = valorCompra * quantidade * produto.getFornecedorDesconto();
 
             valorTotal += subtotal;
 
