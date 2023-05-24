@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -103,6 +102,15 @@ public class PedidosService {
         Pedido entity = new Pedido();
 //        entity.setCodPedido(dto.getCodPedido());
 //        entity.setProdutos(dto.getProdutos());
+        entity = repository.save(entity);
+        return new PedidoDTO(entity);
+    }
+
+
+    public PedidoDTO setStatus(PedidoDTO dto) {
+        Optional<Pedido> obj =repository.findById((long) dto.getId());
+        Pedido entity = new Pedido();
+        entity.setStatusPedido(dto.getStatus());
         entity = repository.save(entity);
         return new PedidoDTO(entity);
     }
