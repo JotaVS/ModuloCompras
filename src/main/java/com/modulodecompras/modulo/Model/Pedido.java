@@ -27,11 +27,8 @@ public class Pedido {
     @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
     private NotaFiscal notaFiscal;
 
-    @ManyToMany
-    @JoinTable(name = "itensPedido",
-            joinColumns = @JoinColumn(name = "pedido_id"),
-            inverseJoinColumns = @JoinColumn(name = "produtos_id")
-    )
-    private List<Produtos> prodPed;
+    @OneToMany(mappedBy = "pedido")
+    private List<ItemPedido> itensPedido;
+
 }
 

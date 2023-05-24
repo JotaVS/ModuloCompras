@@ -18,12 +18,12 @@ public class ProdutoResource {
 
     @Autowired
     ProdutoService pServ;
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Produtos saveProdutos(@RequestBody @Valid Produtos produtos){
-        return pServ.saveP(produtos);
-    }
+//
+//    @PostMapping
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public Produtos saveProdutos(@RequestBody @Valid Produtos produtos){
+//        return pServ.saveP(produtos);
+//    }
 
     @PutMapping ("/{id}")
     public ResponseEntity<?> updateDisciplina(@PathVariable int id,

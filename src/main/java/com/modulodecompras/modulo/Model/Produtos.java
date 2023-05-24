@@ -38,8 +38,8 @@ public class Produtos {
     private Estoque estoque;
 
 
-    @ManyToMany(mappedBy = "prodPed")
-    private List<Pedido> pedido;
+    @OneToMany(mappedBy = "produtosPed")
+    private List<ItemPedido> itensPedido;
 
 }
 
