@@ -12,7 +12,7 @@ public class EstoqueResource {
     EstoqueService eServ;
 
     @GetMapping("/{id}/{qtde}")
-    public ResponseEntity<?> getProdutoById(@PathVariable int id, @PathVariable int qtde){
+    public ResponseEntity<?> debitarProdutoById(@PathVariable int id, @PathVariable int qtde){
         try{
             return ResponseEntity.ok(eServ.debitarProdutoPeloId(id,qtde));
         } catch (Exception e) {
