@@ -29,6 +29,17 @@ public class EstoqueService {
             }
             estDao.save(prod);
             return prod;
+
     }
+
+    public Estoque adicionarProdutoPeloId(int id, int qntd) {
+        Estoque prod = buscarEstoquePeloIdProd(id);
+        int qntdEstoque = prod.getQuantidade();
+        prod.setQuantidade(qntdEstoque + qntd);
+        estDao.save(prod);
+        return prod;
+    }
+
+
 
 }

@@ -1,7 +1,7 @@
 package com.modulodecompras.modulo.Resources;
 
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 import com.modulodecompras.modulo.DTO.PedidoDTO;
 import com.modulodecompras.modulo.Model.Pedido;
 import com.modulodecompras.modulo.Services.NotFoundExcecion.EntityNotFoundException;
@@ -80,22 +80,23 @@ public class PedidosResource {
 //        return  ResponseEntity.created(uri).body(dto);
 //    }
     @GetMapping(value = "/statusPedido/{id}")
-    public  ResponseEntity pegarStatuspedido (@RequestBody PedidoDTO dto) throws Exception{
+    public  ResponseEntity pegarStatuspedido (@RequestBody PedidoDTO dto) throws Exception {
 
-        URL url = new URL("ffs"+dto.getCodPedido()+"ddd");
+        URL url = new URL("ffs" + dto.getCodPedido() + "ddd");
         URLConnection connection = url.openConnection();
         InputStream is = connection.getInputStream();
-        BufferedReader br = new BufferedReader(new InputStreamReader(is,"UTF-8"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
         String status = "";
         StringBuilder jsonPedido = new StringBuilder();
-        while ((status = br.readLine())!=null){
+        while ((status = br.readLine()) != null) {
             jsonPedido.append(status);
         }
-        PedidoDTO pedidoAux=  new Gson().fromJson(jsonPedido.toString(),PedidoDTO.class);
-        dto.setStatus(pedidoAux.getStatus());
-        service.setStatus(dto);
-        return ResponseEntity.ok().body(dto.getStatus());
-    }
 
     }
-
+//        PedidoDTO pedidoAux=  new Gson().fromJson(jsonPedido.toString(),PedidoDTO.class);
+//        dto.setStatus(pedidoAux.getStatus());
+//          service.setStatus(dto);
+//        return ResponseEntity.ok().body(dto.getStatus());
+//      }
+//
+//    }

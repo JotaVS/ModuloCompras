@@ -4,9 +4,10 @@ import com.modulodecompras.modulo.Services.EstoqueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
+@RestController
+@RequestMapping("/Estoque")
 public class EstoqueResource {
     @Autowired
     EstoqueService eServ;
@@ -19,5 +20,11 @@ public class EstoqueResource {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @PostMapping("/{id}/{qtde}")
+    public ResponseEntity<?> adicionarProdutoById(@PathVariable int id, @PathVariable int qtde) {
+        return ResponseEntity.ok(eServ.adicionarProdutoPeloId(id, qtde));
+    }
+
 
 }
