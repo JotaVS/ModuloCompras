@@ -33,7 +33,7 @@ public class PedidosResource {
 
 
     @PostMapping()
-    public ResponseEntity<String> criarPedido(@RequestBody List<ProdutosPedidoDTO> listaProdutos){
+    public ResponseEntity<String> criarPedido(@RequestBody List<ProdutosPedidoDTO> listaProdutos) {
         float valorCompra = service.calcularValor(listaProdutos);
 
 
@@ -41,7 +41,7 @@ public class PedidosResource {
 
         boolean validade = true; //simulação
 
-        if (validade){
+        if (validade) {
 
 
             //Aqui deve ser criado o pedido no banco de dados
@@ -49,29 +49,30 @@ public class PedidosResource {
             service.salvarListaItemPedido(listaProdutos);//Após ser criado o pedido no banco de dados será criado a ligação dos pedidos e produtos por aqui.
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Compra Autorizada e Pedido Criado com SUCESSO");
-            
-        }
-        else {//caso seja negado a compra ele ja finaliza e nada é criado no banco de dados
-            
+
+        } else {//caso seja negado a compra ele ja finaliza e nada é criado no banco de dados
+
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Compra Negada pelo Financeiro!");
-            
+
         }
-        
+
     }
 
     @GetMapping
-    public ResponseEntity<List<PedidoDTO>>fidAll(){
+    public ResponseEntity<List<PedidoDTO>> fidAll() {
         List<PedidoDTO> list = service.fidAll();
-        return  ResponseEntity.ok().body(list);
+        return ResponseEntity.ok().body(list);
 
     }
+
     @GetMapping(value = "/{id}")
-    public ResponseEntity <PedidoDTO> finfById(@PathVariable Long id){
+    public ResponseEntity<PedidoDTO> finfById(@PathVariable Long id) {
         PedidoDTO dto = service.findById(id);
         return ResponseEntity.ok().body(dto);
 
     }
-//    @PostMapping
+
+    //    @PostMapping
 //    public  ResponseEntity<PedidoDTO> insert(@RequestBody PedidoDTO dto){
 //        dto = service.insert(dto);
 //        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -80,7 +81,7 @@ public class PedidosResource {
 //        return  ResponseEntity.created(uri).body(dto);
 //    }
     @GetMapping(value = "/statusPedido/{id}")
-    public  ResponseEntity pegarStatuspedido (@RequestBody PedidoDTO dto) throws Exception {
+    public ResponseEntity pegarStatuspedido(@RequestBody PedidoDTO dto) throws Exception {
 
         URL url = new URL("ffs" + dto.getCodPedido() + "ddd");
         URLConnection connection = url.openConnection();
@@ -92,7 +93,9 @@ public class PedidosResource {
             jsonPedido.append(status);
         }
 
+        return null;
     }
+}
 //        PedidoDTO pedidoAux=  new Gson().fromJson(jsonPedido.toString(),PedidoDTO.class);
 //        dto.setStatus(pedidoAux.getStatus());
 //          service.setStatus(dto);
