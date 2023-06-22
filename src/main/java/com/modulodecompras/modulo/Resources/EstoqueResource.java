@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/Estoque")
+@RequestMapping("/estoque")
 public class EstoqueResource {
     @Autowired
     EstoqueService eServ;
 
-    @GetMapping("/{id}/{qtde}")
+    @PostMapping("/debitar/{id}/{qtde}")
     public ResponseEntity<?> debitarProdutoById(@PathVariable int id, @PathVariable int qtde){
         try{
             return ResponseEntity.ok(eServ.debitarProdutoPeloId(id,qtde));
@@ -21,7 +21,7 @@ public class EstoqueResource {
         }
     }
 
-    @PostMapping("/{id}/{qtde}")
+    @PostMapping("/adicionar/{id}/{qtde}")
     public ResponseEntity<?> adicionarProdutoById(@PathVariable int id, @PathVariable int qtde) {
         return ResponseEntity.ok(eServ.adicionarProdutoPeloId(id, qtde));
     }

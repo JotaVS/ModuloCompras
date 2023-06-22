@@ -5,8 +5,6 @@ import com.modulodecompras.modulo.Services.dao.EstoqueDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class EstoqueService {
 
@@ -19,7 +17,7 @@ public class EstoqueService {
         return estDao.findByIdProduto(id);
     }
 
-    public Estoque debitarProdutoPeloId(int id, int qntd) throws Exception {
+    public String debitarProdutoPeloId(int id, int qntd) throws Exception {
             Estoque prod = buscarEstoquePeloIdProd(id);
             int qntdEstoque = prod.getQuantidade();
             if (qntdEstoque >= qntd) {
@@ -28,16 +26,16 @@ public class EstoqueService {
                 throw new Exception("Quantidade não existe no estoque!");
             }
             estDao.save(prod);
-            return prod;
+            return("Debitado "+qntd+" com sucesso do estoque, agora o estoque possui "+prod.getQuantidade()+" produtos.");
 
     }
 
-    public Estoque adicionarProdutoPeloId(int id, int qntd) {
+    public String adicionarProdutoPeloId(int id, int qntd) {
         Estoque prod = buscarEstoquePeloIdProd(id);
         int qntdEstoque = prod.getQuantidade();
         prod.setQuantidade(qntdEstoque + qntd);
         estDao.save(prod);
-        return prod;
+        return ("Adicionado "+qntd+" com sucesso do estoque, agora o estoque possui "+prod.getQuantidade()+" produtos.");
     }
 
 
