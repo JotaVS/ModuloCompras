@@ -28,7 +28,7 @@ public class ProdutoService {
     @Autowired
     FornecedoresService fServ;
 
-    public String saveP(ProdutoDTO produtos){
+    public ProdutoDTO saveP(ProdutoDTO produtos){
         Produtos pnew = new Produtos();
         pnew.setNome(produtos.getNomeProduto());
         pnew.setValorUnidade(produtos.getPrecoUnit());
@@ -41,7 +41,9 @@ public class ProdutoService {
         enew.setProdutos(pnew);
         eDao.save(enew);
 
-        return ("Produto "+produtos.getNomeProduto()+" criado com Sucesso");
+        produtos.setIdProduto(pnew.getId());
+
+        return (produtos);
 
 
     }

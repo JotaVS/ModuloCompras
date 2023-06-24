@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProdutoDTO {
 
-    private int qtdEstoque,idFornecedor;
+    private int idProduto,qtdEstoque,idFornecedor;
 
     private String nomeProduto,descricao;
 
