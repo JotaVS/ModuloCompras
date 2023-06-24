@@ -2,6 +2,7 @@ package com.modulodecompras.modulo.Resources;
 
 import com.modulodecompras.modulo.Model.Produtos;
 import com.modulodecompras.modulo.Services.ProdutoService;
+import com.modulodecompras.modulo.Services.dto.ProdutoDTO;
 import com.modulodecompras.modulo.Services.dto.ProdutoEstoqueDTO;
 import com.modulodecompras.modulo.Services.dto.VerificarProdutoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,13 @@ public class ProdutoResource {
 
     @Autowired
     ProdutoService pServ;
-//
-//    @PostMapping
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public Produtos saveProdutos(@RequestBody @Valid Produtos produtos){
-//        return pServ.saveP(produtos);
-//    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<?> saveProdutos(@RequestBody @Valid ProdutoDTO produtos){
+
+        return ResponseEntity.ok(pServ.saveP(produtos));
+    }
 
     @PutMapping ("/{id}")
     public ResponseEntity<?> updateDisciplina(@PathVariable int id,

@@ -11,7 +11,7 @@ public class EstoqueService {
     @Autowired
     EstoqueDao estDao;
 
-        public Estoque saveP(Estoque estoque){return estDao.save(estoque);}
+    public Estoque saveP(Estoque estoque){return estDao.save(estoque);}
 
     public Estoque buscarEstoquePeloIdProd(int id) {
         return estDao.findByIdProduto(id);

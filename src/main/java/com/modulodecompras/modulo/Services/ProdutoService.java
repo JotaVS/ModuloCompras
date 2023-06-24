@@ -2,7 +2,9 @@ package com.modulodecompras.modulo.Services;
 
 import com.modulodecompras.modulo.Model.Estoque;
 import com.modulodecompras.modulo.Model.Produtos;
+import com.modulodecompras.modulo.Services.dao.EstoqueDao;
 import com.modulodecompras.modulo.Services.dao.ProdutoDao;
+import com.modulodecompras.modulo.Services.dto.ProdutoDTO;
 import com.modulodecompras.modulo.Services.dto.ProdutoEstoqueDTO;
 import com.modulodecompras.modulo.Services.dto.VerificarProdutoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,30 @@ public class ProdutoService {
     ProdutoDao pDao;
 
     @Autowired
+    EstoqueDao eDao;
+
+    @Autowired
     EstoqueService eServ;
 
-    public Produtos saveP(Produtos produtos){
-        return pDao.save(produtos);
+    @Autowired
+    FornecedoresService fServ;
+
+    public String saveP(ProdutoDTO produtos){
+        Produtos pnew = new Produtos();
+        pnew.setNome(produtos.getNomeProduto());
+        pnew.setValorUnidade(produtos.getPrecoUnit());
+        pnew.setFornecedores(fServ.buscaFornecedoresPeloId(produtos.getIdFornecedor()));
+        pnew.setDescricao(produtos.getDescricao());
+        pDao.save(pnew);
+
+        Estoque enew = new Estoque();
+        enew.setQuantidade(produtos.getQtdEstoque());
+        enew.setProdutos(pnew);
+        eDao.save(enew);
+
+        return ("Produto "+produtos.getNomeProduto()+" criado com Sucesso");
+
+
     }
 
     public Produtos buscaProdutoPeloId(int id){
