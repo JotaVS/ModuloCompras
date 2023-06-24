@@ -22,9 +22,9 @@ public class ProdutoResource {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> saveProdutos(@RequestBody @Valid ProdutoDTO produtos){
+    public String saveProdutos(@RequestBody @Valid ProdutoDTO produtos){
 
-        return ResponseEntity.ok(pServ.saveP(produtos));
+        return (pServ.saveP(produtos));
     }
 
     @PutMapping ("/{id}")
