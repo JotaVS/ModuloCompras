@@ -25,6 +25,16 @@ public class EstoqueResource {
     public ResponseEntity<?> adicionarProdutoById(@PathVariable int id, @PathVariable int qtde) {
         return ResponseEntity.ok(eServ.adicionarProdutoPeloId(id, qtde));
     }
+    @GetMapping("/verificar-epi/{matricula}/{idEPI}")
+    public ResponseEntity<?> verificarEPIPorMatricula(@PathVariable String matricula, @PathVariable int idEPI) {
+        boolean possuiEPI = eServ.verificarEPIPorMatricula(matricula, idEPI);
+        if (possuiEPI) {
+            return ResponseEntity.ok("O EPI está disponível no estoque.");
+        } else {
+            return ResponseEntity.ok("O EPI não está disponível no estoque.");
+        }
+    }
+
 
 
 }

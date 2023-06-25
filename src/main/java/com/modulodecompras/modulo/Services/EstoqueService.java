@@ -38,6 +38,16 @@ public class EstoqueService {
         return ("Adicionado "+qntd+" com sucesso do estoque, agora o estoque possui "+prod.getQuantidade()+" produtos.");
     }
 
+    public boolean verificarEPIPorMatricula(String matricula, int idEPI) {
+        Estoque estoque = buscarEstoquePeloIdProd(idEPI);
+        if (estoque != null && estoque.getQuantidade() > 0) {
+            return true; // O EPI está disponível no estoque
+        } else {
+            return false; // O EPI não está disponível no estoque
+        }
+    }
+
+
 
 
 }
