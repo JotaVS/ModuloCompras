@@ -1,10 +1,10 @@
 package com.modulodecompras.modulo.Model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity
@@ -25,7 +25,8 @@ public class ItemPedido {
 
     @ManyToOne
     @JoinColumn(name = "produto_id")
-    private Produtos produtosPed;
+    private Produtos produto;
+
 
     private int quantidade;
 

@@ -1,7 +1,5 @@
 package com.modulodecompras.modulo.Resources;
 
-
-//import com.google.gson.Gson;
 import com.modulodecompras.modulo.DTO.PedidoDTO;
 import com.modulodecompras.modulo.Model.Pedido;
 import com.modulodecompras.modulo.Services.NotFoundExcecion.EntityNotFoundException;
@@ -29,57 +27,25 @@ import java.util.List;
 @RequestMapping(value = "/pedidos")
 public class PedidosResource {
     @Autowired
-    private PedidosService service;
+    private PedidosService pedidoService;
 
 
-    @PostMapping()
-    public ResponseEntity<String> criarPedido(@RequestBody List<ProdutosPedidoDTO> listaProdutos) {
-        float valorCompra = service.calcularValor(listaProdutos);
-
-
-        //agora deve rodar a validação da compra com o valorCompra
-
-        boolean validade = true; //simulação
-
-        if (validade) {
-
-
-            //Aqui deve ser criado o pedido no banco de dados
-
-            service.salvarListaItemPedido(listaProdutos);//Após ser criado o pedido no banco de dados será criado a ligação dos pedidos e produtos por aqui.
-
-            return ResponseEntity.status(HttpStatus.CREATED).body("Compra Autorizada e Pedido Criado com SUCESSO");
-
-        } else {//caso seja negado a compra ele ja finaliza e nada é criado no banco de dados
-
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Compra Negada pelo Financeiro!");
-
-        }
-
+    @PostMapping
+    public ResponseEntity<ResponseEntity<String>> salvarPedido(@RequestBody Pedido pedido) {
+        ResponseEntity<String> pedidoSalvo = pedidoService.salvarPedido(pedido);
+        return ResponseEntity.ok(pedidoSalvo);
     }
-
     @GetMapping
-    public ResponseEntity<List<PedidoDTO>> fidAll() {
-        List<PedidoDTO> list = service.fidAll();
-        return ResponseEntity.ok().body(list);
-
+    public ResponseEntity<List<Pedido>> getAllPedidos() {
+        List<Pedido> pedidos = pedidoService.getAllPedidos();
+        return ResponseEntity.ok(pedidos);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<PedidoDTO> finfById(@PathVariable Long id) {
-        PedidoDTO dto = service.findById(id);
-        return ResponseEntity.ok().body(dto);
 
-    }
 
-    //    @PostMapping
-//    public  ResponseEntity<PedidoDTO> insert(@RequestBody PedidoDTO dto){
-//        dto = service.insert(dto);
-//        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-//                .buildAndExpand(dto.getId()).toUri();
-//        // cria um retorno de 201 que padrão de inserção
-//        return  ResponseEntity.created(uri).body(dto);
-//    }
+
+
+
     @GetMapping(value = "/statusPedido/{id}")
     public ResponseEntity pegarStatuspedido(@RequestBody PedidoDTO dto) throws Exception {
 
@@ -96,10 +62,3 @@ public class PedidosResource {
         return null;
     }
 }
-//        PedidoDTO pedidoAux=  new Gson().fromJson(jsonPedido.toString(),PedidoDTO.class);
-//        dto.setStatus(pedidoAux.getStatus());
-//          service.setStatus(dto);
-//        return ResponseEntity.ok().body(dto.getStatus());
-//      }
-//
-//    }

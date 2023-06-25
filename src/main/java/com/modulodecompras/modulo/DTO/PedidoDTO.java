@@ -16,13 +16,7 @@ public class PedidoDTO implements Serializable {
     private String codPedido;
     private String produtos;
     private Boolean status;
-    public PedidoDTO(Pedido entity){
-        this.id = entity.getId();
-        this.status = entity.getStatusPedido();
-//        this.codPedido= entity.getCodPedido();
-//        this.produtos = entity.getProdutos();
 
-    }
 
 }
 

@@ -4,13 +4,19 @@ import com.modulodecompras.modulo.DTO.PedidoDTO;
 import com.modulodecompras.modulo.Model.Fornecedores;
 import com.modulodecompras.modulo.Model.ItemPedido;
 import com.modulodecompras.modulo.Model.Pedido;
+import com.modulodecompras.modulo.Model.Produtos;
+import com.modulodecompras.modulo.Repository.PedidoRepository;
 import com.modulodecompras.modulo.Repository.PedidosRepository;
+import com.modulodecompras.modulo.Repository.ProdutoRepository;
 import com.modulodecompras.modulo.Services.NotFoundExcecion.EntityNotFoundException;
 import com.modulodecompras.modulo.Services.dao.PedidoDao2;
 import com.modulodecompras.modulo.Services.dto.ProdutosPedidoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class PedidosService {
     @Autowired
-    private PedidosRepository repository;
+    private PedidosRepository pedidoRepository;
 
     @Autowired
     private PedidoDao2 pedDao;
@@ -28,91 +34,82 @@ public class PedidosService {
     private ProdutoService prodServ;
 
     @Autowired ItemPedidoService ipServ;
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
 
-    public void salvarListaItemPedido(List<ProdutosPedidoDTO> listaProdutos){
-        Pedido idPedido = findMaiorValorID();
 
-        for (ProdutosPedidoDTO produto: listaProdutos){
-
-            ItemPedido ip = ItemPedido.builder()
-                    .pedido(idPedido)
-                    .produtosPed(prodServ.buscaProdutoPeloId(produto.getIdProduto()))
-                    .quantidade(produto.getQuantidadeProduto())
-                    .build();
-
-            ipServ.saveIP(ip);
-
-        }
-
-    }
 
     public Pedido findMaiorValorID() {
         Optional<Pedido> optionalPedido = pedDao.findMaiorValorID();
         return optionalPedido.orElse(null);
     }
 
-    public float calcularValor(List<ProdutosPedidoDTO> listaProdutos){
-        float valorTotal = 0.0f;
+    @Value("http://localhost:9000/api/pedido/aprovar")
+    private String outraApiUrl;
 
-        for (ProdutosPedidoDTO produto: listaProdutos){
-            float valorCompra = produto.getValorCompra();
-            int quantidade = produto.getQuantidadeProduto();
+    public ResponseEntity<String> salvarPedido(Pedido pedido) {
+        RestTemplate restTemplate = new RestTemplate();
+        double valorTotal = 0.0;
+        String status = "";
 
-            float subtotal = valorCompra * quantidade * produto.getFornecedorDesconto();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<Pedido> requestEntity = new HttpEntity<>(pedido, headers);
+        ResponseEntity<Pedido> response = restTemplate.exchange(outraApiUrl, HttpMethod.POST, requestEntity, Pedido.class);
 
-            valorTotal += subtotal;
+        // Verificar cada item do pedido
+        if (response.getStatusCode().is2xxSuccessful()) {
+            Pedido pedidoAprovado = response.getBody();
+            if (response.getBody().isAprovado()){
+                pedidoAprovado.setAprovado(true);
+                for (ItemPedido item : pedidoAprovado.getItems()) {
+                    Produtos produto = item.getProduto();
 
+                    // Verificar se o produto já existe
+                    if (produto.getId() == null) {
+                        // O produto não existe, então salve-o antes de atribuí-lo ao item
+                        produtoRepository.save(produto);
+                    }
+
+                    // Agora você pode atribuir o produto ao item
+                    item.setProduto(produto);
+                }
+
+                // Calcular o valor total do pedido
+                for (ItemPedido item : pedidoAprovado.getItems()) {
+                    double valorItem = item.getProduto().getPreco();
+                    int quantidadeItem = item.getQuantidade();
+                    double valorItemTotal = valorItem * quantidadeItem;
+                    valorTotal += valorItemTotal;
+                }
+
+                // Atribuir o valor total ao pedido
+                pedidoAprovado.setValorTotal(valorTotal);
+
+                // Agora você pode salvar o pedido
+                pedidoRepository.save(pedidoAprovado);
+                return ResponseEntity.ok("Aprovado");
+
+
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("pagamento Negado");
+            }
         }
 
-        return (valorTotal);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("erro ao processar");
     }
 
-//        public float calcularValorTotal(List<ProdutosPedidoDTO> produtosPedidoDTO) {
-//        float valorTotal = 0.0f;
-//
-//        for (ProdutosPedidoDTO produto : produtosPedidoDTO) {
-//            float valorCompra = produto.getValorCompra();
-//            int quantidade = produto.getQuantProduto();
-//
-//            float subtotal = valorCompra * quantidade;
-//
-//            valorTotal += subtotal;
-//        }
-//
-//        return valorTotal;
-//    }
-
-
-    @Transactional(readOnly = true)
-    public List<PedidoDTO> fidAll(){
-        List<Pedido> list = repository.findAll();
-        return  list.stream().map(x -> new PedidoDTO(x)).collect(Collectors.toList());
-
-
-    }
-
-    @Transactional(readOnly = true)
-    public PedidoDTO findById(Long id){
-        Optional<Pedido> obj= repository.findById(id);
-        Pedido entity = obj.orElseThrow(()-> new EntityNotFoundException("entity not found"));
-        return new PedidoDTO(entity);
-    }
-    @Transactional
-    public PedidoDTO insert(PedidoDTO dto) {
-        Pedido entity = new Pedido();
-//        entity.setCodPedido(dto.getCodPedido());
-//        entity.setProdutos(dto.getProdutos());
-        entity = repository.save(entity);
-        return new PedidoDTO(entity);
+    public List<Pedido> getAllPedidos() {
+        return pedidoRepository.findAll();
     }
 
 
-    public PedidoDTO setStatus(PedidoDTO dto) {
-        Optional<Pedido> obj =repository.findById((long) dto.getId());
-        Pedido entity = new Pedido();
-        entity.setStatusPedido(dto.getStatus());
-        entity = repository.save(entity);
-        return new PedidoDTO(entity);
-    }
+
+
+
+
+
+
+
+
 }

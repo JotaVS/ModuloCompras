@@ -20,16 +20,18 @@ public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private int valor;
 
     @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
     private NotaFiscal notaFiscal;
 
-    @OneToMany(mappedBy = "pedido")
-    private List<ItemPedido> itensPedido;
-    private Boolean statusPedido;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "pedido_id")
+    private List<ItemPedido> items;
+    private boolean aprovado;
+    private double valorTotal;
 
 }
 

@@ -41,7 +41,7 @@ public class ProdutoService {
         enew.setProdutos(pnew);
         eDao.save(enew);
 
-        produtos.setIdProduto(pnew.getId());
+        produtos.setIdProduto(Math.toIntExact(pnew.getId()));
 
         return (produtos);
 

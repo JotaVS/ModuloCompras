@@ -20,7 +20,7 @@ public class Produtos {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
 //    @NotNull
     private String nome;
@@ -36,10 +36,8 @@ public class Produtos {
 
     @OneToOne(mappedBy = "produtos")
     private Estoque estoque;
-
-
-    @OneToMany(mappedBy = "produtosPed")
-    private List<ItemPedido> itensPedido;
+    private double valorTotal;
+    private double preco;
 
 }
 
