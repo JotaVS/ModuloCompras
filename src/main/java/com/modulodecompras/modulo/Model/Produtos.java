@@ -34,7 +34,7 @@ public class Produtos {
     @JoinColumn(name = "fornecedor_id")
     private Fornecedores fornecedores;
 
-    @OneToOne(mappedBy = "produtos")
+    @OneToOne(mappedBy = "produtos", cascade = CascadeType.ALL, orphanRemoval = true)
     private Estoque estoque;
     private double valorTotal;
     private double preco;

@@ -39,7 +39,7 @@ public class Fornecedores {
 
     private String prazoPagamento;
 
-    @OneToMany(mappedBy = "fornecedores")
+    @OneToMany(mappedBy = "fornecedores", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Produtos> produtos;
     private float descontoLote;
 
