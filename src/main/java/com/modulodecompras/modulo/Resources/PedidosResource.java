@@ -4,6 +4,7 @@ import com.modulodecompras.modulo.DTO.PedidoDTO;
 import com.modulodecompras.modulo.Model.Pedido;
 import com.modulodecompras.modulo.Services.NotFoundExcecion.EntityNotFoundException;
 import com.modulodecompras.modulo.Services.PedidosService;
+import com.modulodecompras.modulo.Services.dto.FuncionariosPedidosDTO;
 import com.modulodecompras.modulo.Services.dto.ProdutosPedidoDTO;
 import com.modulodecompras.modulo.Services.dto.TrabalhadorDTO;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -34,42 +35,37 @@ public class PedidosResource {
     private PedidosService pedidoService;
 
 
+    @Operation(description = "Api que cria um pedido.")
     @PostMapping
     public ResponseEntity<ResponseEntity<String>> salvarPedido(@RequestBody Pedido pedido) {
         ResponseEntity<String> pedidoSalvo = pedidoService.salvarPedido(pedido);
         return ResponseEntity.ok(pedidoSalvo);
     }
+
+    @Operation(description = "Api que mostra todos os pedidos.")
     @GetMapping
     public ResponseEntity<List<Pedido>> getAllPedidos() {
         List<Pedido> pedidos = pedidoService.getAllPedidos();
         return ResponseEntity.ok(pedidos);
     }
 
-
-    @Operation(description = "Api que fornece uma Lista dos Pedidos que não possuem um Funcionario Responsavel Alocado!")
-    @Parameter(required = false,description = "Não há necessidade de nenhum parametro.")
-    @GetMapping(value = "/alocados/nao")
-    public ResponseEntity<List<Pedido>> getPedidosNaoAlocados() {
-        List<Pedido> pedidos = pedidoService.getPedidosAprovadosSemFuncionarioAlocado();
-        return ResponseEntity.ok(pedidos);
+    @Operation(description = "Api que fornece uma Lista com os Funcionarios, os Pedidos sem funcionario Responsavel" +
+            " e os com Funcionario Responsavel!")
+    @GetMapping(value = "/alocar")
+    public ResponseEntity<FuncionariosPedidosDTO> getFuncionariosePedidos() {
+        FuncionariosPedidosDTO funcionariosPedidos = pedidoService.getFuncionariosPedidos();
+        return ResponseEntity.ok(funcionariosPedidos);
     }
 
-
-    @GetMapping(value = "/trabalhadores")
-    public ResponseEntity<List<TrabalhadorDTO>> getTrabalhadoresCompras() {
-        List<TrabalhadorDTO> trabalhador = pedidoService.getTrabalhadoresCompras();
-        return ResponseEntity.ok(trabalhador);
-    }
-
-
-    @PostMapping("/alocar/{idfuncionario}/{idpedido}")
-    public ResponseEntity<?>alocarFuncionario(@PathVariable int idfuncionario, @PathVariable Long idpedido){
-        return ResponseEntity.ok(pedidoService.alocarFuncionario(idfuncionario,idpedido));
+    @Operation(description = "Api utilizada para Alocar um Funcionario a um Pedido")
+    @PutMapping("/alocar")
+    public ResponseEntity<?>alocarFuncionario2(@RequestParam int matriculaFunc,@RequestParam Long idPedido){
+        return ResponseEntity.ok(pedidoService.alocarFuncionario(matriculaFunc,idPedido));
 
     }
 
 
-
+    @Operation(description = "Api utilizada para conseguir o Status de um Pedido")
     @GetMapping(value = "/statusPedido/{id}")
     public ResponseEntity pegarStatuspedido(@RequestBody PedidoDTO dto) throws Exception {
 

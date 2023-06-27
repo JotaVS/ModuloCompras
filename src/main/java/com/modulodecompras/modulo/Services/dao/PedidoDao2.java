@@ -19,6 +19,10 @@ public interface PedidoDao2 extends JpaRepository<Pedido, Integer> {
     @EntityGraph(attributePaths = { "items" })
     List<Pedido> findPedidosAprovadosSemFuncionarioAlocado();
 
+    @Query("SELECT p FROM Pedido p WHERE p.aprovado = true AND p.idFuncionarioAlocado <> 0")
+    @EntityGraph(attributePaths = { "items" })
+    List<Pedido> findPedidosAlocados();
+
     @EntityGraph(attributePaths = { "items" })
     Optional<Pedido> findById(Long id);
 }

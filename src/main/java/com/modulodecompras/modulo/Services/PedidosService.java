@@ -10,6 +10,7 @@ import com.modulodecompras.modulo.Repository.PedidosRepository;
 import com.modulodecompras.modulo.Repository.ProdutoRepository;
 import com.modulodecompras.modulo.Services.NotFoundExcecion.EntityNotFoundException;
 import com.modulodecompras.modulo.Services.dao.PedidoDao2;
+import com.modulodecompras.modulo.Services.dto.FuncionariosPedidosDTO;
 import com.modulodecompras.modulo.Services.dto.ProdutosPedidoDTO;
 import com.modulodecompras.modulo.Services.dto.TrabalhadorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,6 +133,10 @@ public class PedidosService {
         return pedDao.findPedidosAprovadosSemFuncionarioAlocado();
     }
 
+    public List<Pedido> getPedidosAprovadoseAlocados() {
+        return pedDao.findPedidosAlocados();
+    }
+
     public String alocarFuncionario(int idfuncionario, Long idpedido) {
         Optional<Pedido> ped = pedDao.findById(idpedido);
         Pedido pedido = ped.get();
@@ -179,4 +184,18 @@ public class PedidosService {
     }
 
 
+    public FuncionariosPedidosDTO getFuncionariosPedidos() {
+        List<TrabalhadorDTO> funcionarios = getTrabalhadoresCompras();
+        List<Pedido> pedidosNaoAlocados = getPedidosAprovadosSemFuncionarioAlocado();
+        List<Pedido> pedidosAlocados = getPedidosAprovadoseAlocados();
+
+        FuncionariosPedidosDTO funcionariosPedidos = new FuncionariosPedidosDTO();
+
+        funcionariosPedidos.setTrabalhador(funcionarios);
+        funcionariosPedidos.setPedidosNaoAlocados(pedidosNaoAlocados);
+        funcionariosPedidos.setPedidosAlocados(pedidosAlocados);
+
+        return funcionariosPedidos;
+
+    }
 }
