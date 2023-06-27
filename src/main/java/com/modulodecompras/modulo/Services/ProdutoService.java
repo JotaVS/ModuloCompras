@@ -48,7 +48,7 @@ public class ProdutoService {
 
     }
 
-    public Produtos buscaProdutoPeloId(int id){
+    public Produtos buscaProdutoPeloId(Long id){
         Optional<Produtos> op = pDao.findById(id);
 
         if (op.isPresent()){
@@ -58,7 +58,7 @@ public class ProdutoService {
         }
     }
 
-    public VerificarProdutoDTO verificarProduto(int id){
+    public VerificarProdutoDTO verificarProduto(Long id){
         Optional<Produtos> op = pDao.findById(id);
 
         if (op.isPresent()){
@@ -85,7 +85,7 @@ public class ProdutoService {
     }
 
 
-    public ProdutoEstoqueDTO buscaProdutoPeloIdDto(int id) throws Exception{
+    public ProdutoEstoqueDTO buscaProdutoPeloIdDto(Long id) throws Exception{
         Optional<Produtos> op = pDao.findById(id);
 
         if (op.isPresent()){
@@ -93,7 +93,7 @@ public class ProdutoService {
             Estoque est = eServ.buscarEstoquePeloIdProd(id);
 
             ProdutoEstoqueDTO prodEst = ProdutoEstoqueDTO.builder()
-                    .idProduto(id)
+                    .idProduto(Math.toIntExact(id))
                     .qtdEstoque(est.getQuantidade())
                     .nomeProduto(op.get().getNome())
                     .precoUnit(op.get().getValorUnidade())
@@ -113,7 +113,7 @@ public class ProdutoService {
     public List<Produtos> buscaAllProduto() {
         return pDao.findAll();
     }
-    public String apagarProduto(int id) throws Exception{
+    public String apagarProduto(Long id) throws Exception{
         Produtos p = buscaProdutoPeloId(id);
         if (p == null){
             throw new Exception("Produto não encontrado!!");
@@ -123,7 +123,7 @@ public class ProdutoService {
 
     }
 
-    public Object updateProdutos(int id, Produtos produtos) throws Exception{
+    public Object updateProdutos(Long id, Produtos produtos) throws Exception{
         Produtos p = buscaProdutoPeloId(id);
         if (p == null){
             throw new Exception("Produto não encontrado!!");

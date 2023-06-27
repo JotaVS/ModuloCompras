@@ -13,11 +13,11 @@ public class EstoqueService {
 
     public Estoque saveP(Estoque estoque){return estDao.save(estoque);}
 
-    public Estoque buscarEstoquePeloIdProd(int id) {
+    public Estoque buscarEstoquePeloIdProd(Long id) {
         return estDao.findByIdProduto(id);
     }
 
-    public String debitarProdutoPeloId(int id, int qntd) throws Exception {
+    public String debitarProdutoPeloId(Long id, int qntd) throws Exception {
             Estoque prod = buscarEstoquePeloIdProd(id);
             int qntdEstoque = prod.getQuantidade();
             if (qntdEstoque >= qntd) {
@@ -30,7 +30,7 @@ public class EstoqueService {
 
     }
 
-    public String adicionarProdutoPeloId(int id, int qntd) {
+    public String adicionarProdutoPeloId(Long id, int qntd) {
         Estoque prod = buscarEstoquePeloIdProd(id);
         int qntdEstoque = prod.getQuantidade();
         prod.setQuantidade(qntdEstoque + qntd);
@@ -38,7 +38,7 @@ public class EstoqueService {
         return ("Adicionado "+qntd+" com sucesso do estoque, agora o estoque possui "+prod.getQuantidade()+" produtos.");
     }
 
-    public boolean verificarEPIPorMatricula(String matricula, int idEPI) {
+    public boolean verificarEPIPorMatricula(String matricula, Long idEPI) {
         Estoque estoque = buscarEstoquePeloIdProd(idEPI);
         if (estoque != null && estoque.getQuantidade() > 0) {
             return true; // O EPI está disponível no estoque

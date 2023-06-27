@@ -27,7 +27,7 @@ public class ProdutoResource {
     }
 
     @PutMapping ("/{id}")
-    public ResponseEntity<?> updateDisciplina(@PathVariable int id,
+    public ResponseEntity<?> atualizarProduto(@PathVariable Long id,
                                               @Valid @RequestBody Produtos produtos){
         try{
             return ResponseEntity.ok(pServ.updateProdutos(id, produtos));
@@ -37,7 +37,7 @@ public class ProdutoResource {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> apagaProduto(@PathVariable int id){
+    public ResponseEntity<String> apagaProduto(@PathVariable Long id){
         try{
             return ResponseEntity.ok(pServ.apagarProduto(id));
         }catch (Exception e){
@@ -46,7 +46,7 @@ public class ProdutoResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProdutoById(@PathVariable int id){
+    public ResponseEntity<?> getProdutoById(@PathVariable Long id){
 
 
         try{
@@ -56,7 +56,7 @@ public class ProdutoResource {
         }
     }
 
-    @GetMapping("/verificar/{id}") public VerificarProdutoDTO verificarProdutoDTO(@PathVariable int id){
+    @GetMapping("/verificar/{id}") public VerificarProdutoDTO verificarProdutoDTO(@PathVariable Long id){
 
         return (pServ.verificarProduto(id));
 

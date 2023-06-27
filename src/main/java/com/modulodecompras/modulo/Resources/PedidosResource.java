@@ -5,6 +5,10 @@ import com.modulodecompras.modulo.Model.Pedido;
 import com.modulodecompras.modulo.Services.NotFoundExcecion.EntityNotFoundException;
 import com.modulodecompras.modulo.Services.PedidosService;
 import com.modulodecompras.modulo.Services.dto.ProdutosPedidoDTO;
+import com.modulodecompras.modulo.Services.dto.TrabalhadorDTO;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jdk.jfr.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +46,27 @@ public class PedidosResource {
     }
 
 
+    @Operation(description = "Api que fornece uma Lista dos Pedidos que não possuem um Funcionario Responsavel Alocado!")
+    @Parameter(required = false,description = "Não há necessidade de nenhum parametro.")
+    @GetMapping(value = "/alocados/nao")
+    public ResponseEntity<List<Pedido>> getPedidosNaoAlocados() {
+        List<Pedido> pedidos = pedidoService.getPedidosAprovadosSemFuncionarioAlocado();
+        return ResponseEntity.ok(pedidos);
+    }
 
+
+    @GetMapping(value = "/trabalhadores")
+    public ResponseEntity<List<TrabalhadorDTO>> getTrabalhadoresCompras() {
+        List<TrabalhadorDTO> trabalhador = pedidoService.getTrabalhadoresCompras();
+        return ResponseEntity.ok(trabalhador);
+    }
+
+
+    @PostMapping("/alocar/{idfuncionario}/{idpedido}")
+    public ResponseEntity<?>alocarFuncionario(@PathVariable int idfuncionario, @PathVariable Long idpedido){
+        return ResponseEntity.ok(pedidoService.alocarFuncionario(idfuncionario,idpedido));
+
+    }
 
 
 

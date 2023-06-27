@@ -2,9 +2,11 @@ package com.modulodecompras.modulo;
 
 import com.modulodecompras.modulo.Model.Estoque;
 import com.modulodecompras.modulo.Model.Fornecedores;
+import com.modulodecompras.modulo.Model.Pedido;
 import com.modulodecompras.modulo.Model.Produtos;
 import com.modulodecompras.modulo.Services.dao.EstoqueDao;
 import com.modulodecompras.modulo.Services.dao.FornecedoresDao;
+import com.modulodecompras.modulo.Services.dao.PedidoDao2;
 import com.modulodecompras.modulo.Services.dao.ProdutoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -29,6 +31,9 @@ public class ModulocomprasApplication implements CommandLineRunner {
 
 	@Autowired
 	EstoqueDao estDao;
+
+	@Autowired
+	PedidoDao2 pedDao;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -63,6 +68,18 @@ public class ModulocomprasApplication implements CommandLineRunner {
 		e2.setQuantidade(10);
 		e2.setProdutos(p2);
 		estDao.save(e2);
+
+		Pedido ped = new Pedido();
+		ped.setValor(10);
+		ped.setAprovado(true);
+		ped.setValorTotal(30);
+		pedDao.save(ped);
+
+		Pedido ped2 = new Pedido();
+		ped2.setValor(10);
+		ped2.setAprovado(false);
+		ped2.setValorTotal(30);
+		pedDao.save(ped2);
 
 		//Fim
 

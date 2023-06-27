@@ -33,5 +33,7 @@ public class Pedido {
     private boolean aprovado;
     private double valorTotal;
 
+    private int idFuncionarioAlocado;
+
 }
 

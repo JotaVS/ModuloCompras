@@ -11,12 +11,23 @@ import com.modulodecompras.modulo.Repository.ProdutoRepository;
 import com.modulodecompras.modulo.Services.NotFoundExcecion.EntityNotFoundException;
 import com.modulodecompras.modulo.Services.dao.PedidoDao2;
 import com.modulodecompras.modulo.Services.dto.ProdutosPedidoDTO;
+import com.modulodecompras.modulo.Services.dto.TrabalhadorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,8 +48,21 @@ public class PedidosService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
+    @Autowired
+    RestTemplate restTemplate;
 
 
+    public Pedido saveF(Pedido pedido){return pedDao.save(pedido);}
+
+    public Pedido pedidoById(int id) {
+        Optional<Pedido> op = pedDao.findById(id);
+
+        if (op.isPresent()){
+            return op.get();
+        }else{
+            return null;
+        }
+    }
 
     public Pedido findMaiorValorID() {
         Optional<Pedido> optionalPedido = pedDao.findMaiorValorID();
@@ -104,12 +128,55 @@ public class PedidosService {
     }
 
 
+    public List<Pedido> getPedidosAprovadosSemFuncionarioAlocado() {
+        return pedDao.findPedidosAprovadosSemFuncionarioAlocado();
+    }
 
+    public String alocarFuncionario(int idfuncionario, Long idpedido) {
+        Optional<Pedido> ped = pedDao.findById(idpedido);
+        Pedido pedido = ped.get();
+        pedido.setIdFuncionarioAlocado(idfuncionario);
+        pedDao.save(pedido);
+        return ("Funcionario com ID: "+idfuncionario+"! Alocado com sucesso ao Pedido de ID: "+idpedido+"!");
+    }
 
+    public List<TrabalhadorDTO> getTrabalhadoresCompras(){
+        restTemplate = new RestTemplate();
+        String url = "https://rh-sgeu.up.railway.app/funcionario/todos";
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        String json = response.getBody();
 
+        JsonReader jsonReader = Json.createReader(new StringReader(json));
+        JsonArray jsonArray = jsonReader.readArray();
 
+        List<TrabalhadorDTO> trabalhadores = new ArrayList<>();
 
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonObject jsonObject = jsonArray.getJsonObject(i);
 
+            JsonObject departamento = jsonObject.getJsonObject("departamento");
+            String nomeDepartamento = departamento.getString("nome");
+
+            if ("Compras".equals(nomeDepartamento)) {
+                int matricula = jsonObject.getInt("matricula");
+                String nome = jsonObject.getString("nome");
+                boolean trabalhadorNoturno = jsonObject.getBoolean("trabalhadorNoturno");
+                String cargo = jsonObject.getString("cargo");
+
+                TrabalhadorDTO trabalhador = new TrabalhadorDTO();
+                trabalhador.setNome(nome);
+                trabalhador.setTrabalhadorNoturo(trabalhadorNoturno);
+                trabalhador.setDepartamento(nomeDepartamento);
+                trabalhador.setCargo(cargo);
+                trabalhador.setMatricula(matricula);
+                trabalhadores.add(trabalhador);
+            }
+        }
+
+        jsonReader.close();
+
+        return trabalhadores;
+    }
 
 
 }

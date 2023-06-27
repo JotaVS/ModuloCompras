@@ -12,6 +12,6 @@ public interface EstoqueDao extends JpaRepository<Estoque,Integer> {
 
 
     @Query("SELECT p FROM Estoque p WHERE p.produtos.id = :id")
-    Estoque findByIdProduto(int id);
+    Estoque findByIdProduto(Long id);
 
 }
