@@ -4,6 +4,7 @@ import com.modulodecompras.modulo.Model.Fornecedores;
 import com.modulodecompras.modulo.Model.Produtos;
 import com.modulodecompras.modulo.Services.FornecedoresService;
 import com.modulodecompras.modulo.Services.ProdutoService;
+import com.modulodecompras.modulo.Services.dto.FornecedorProdutoDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,12 @@ public class FornecedoresResource {
     @GetMapping()
     public ResponseEntity<List<Fornecedores>> getAllfFornecedores(){
         return ResponseEntity.ok(fServ.buscaAllFornecedores());
+    }
+
+    @Operation(description = "Api responsavel por buscar fornecedores de um pedido de um cliente!")
+    @GetMapping("/fornecedores/pesquisaPedido/{pedidoId}")
+    public List<FornecedorProdutoDTO> getFornecedorPorPedidoCliente(@PathVariable int pedidoId) throws Exception {
+        return fServ.getFornecedorPorPedidoCliente(pedidoId);
     }
 
 }

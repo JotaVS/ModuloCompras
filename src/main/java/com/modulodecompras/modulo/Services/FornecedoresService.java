@@ -4,9 +4,18 @@ import com.modulodecompras.modulo.Model.Fornecedores;
 
 import com.modulodecompras.modulo.Model.Produtos;
 import com.modulodecompras.modulo.Services.dao.FornecedoresDao;
+import com.modulodecompras.modulo.Services.dto.FornecedorProdutoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +23,11 @@ import java.util.Optional;
 public class FornecedoresService {
 
     @Autowired
+    RestTemplate restTemplate;
+    @Autowired
     FornecedoresDao fDao;
+    @Autowired
+    ProdutoService pServ;
 
     public Fornecedores saveF(Fornecedores fornecedores){return fDao.save(fornecedores);}
 
@@ -59,7 +72,32 @@ public class FornecedoresService {
         return fDao.save(f);
     }
 
+    public List<FornecedorProdutoDTO> getFornecedorPorPedidoCliente (int pedidoId) throws Exception {
+        restTemplate = new RestTemplate();
+        String url = "http://backend-vendas-production.up.railway.app/pedido/buscar/" + pedidoId;
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        String json = response.getBody();
 
+        JsonReader jsonReader = Json.createReader(new StringReader(json));
 
+        JsonObject pedido = jsonReader.readObject();
+        JsonArray jsonArray = pedido.getJsonArray("itensPedido");
 
+        List<FornecedorProdutoDTO> fornProdutoDTOs = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonObject jsonObject = jsonArray.getJsonObject(i);
+            JsonObject itemPedido = jsonObject.getJsonObject("itemPedido");
+            int idProduto = itemPedido.getInt("idProduto");
+            Produtos p = pServ.buscaProdutoPeloId(Long.valueOf(idProduto));
+            Fornecedores f = p.getFornecedores();
+
+            FornecedorProdutoDTO fornPedido = FornecedorProdutoDTO.builder()
+                    .nomeFornecedor(f.getNome())
+                    .nomeProduto(p.getNome())
+                    .build();
+            fornProdutoDTOs.add(fornPedido);
+        }
+        return fornProdutoDTOs;
+    }
 }
