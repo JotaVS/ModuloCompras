@@ -1,6 +1,7 @@
 package com.modulodecompras.modulo.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,6 +41,7 @@ public class Fornecedores {
     private String prazoPagamento;
 
     @OneToMany(mappedBy = "fornecedores", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Produtos> produtos;
     private float descontoLote;
 

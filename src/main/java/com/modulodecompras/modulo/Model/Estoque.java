@@ -1,5 +1,6 @@
 package com.modulodecompras.modulo.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class Estoque {
 
     @OneToOne
     @JoinColumn(name = "ProdutoID", unique = true)
+    @JsonIgnore
     private Produtos produtos;
 
     private int quantidade;
