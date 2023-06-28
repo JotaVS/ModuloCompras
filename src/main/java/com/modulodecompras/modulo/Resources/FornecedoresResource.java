@@ -70,9 +70,12 @@ public class FornecedoresResource {
     }
 
     @Operation(description = "Api responsavel por buscar fornecedores de um pedido de um cliente!")
-    @GetMapping("/fornecedores/pesquisaPedido/{pedidoId}")
-    public List<FornecedorProdutoDTO> getFornecedorPorPedidoCliente(@PathVariable int pedidoId) throws Exception {
-        return fServ.getFornecedorPorPedidoCliente(pedidoId);
+    @GetMapping("/pesquisaPedido/{pedidoId}")
+    public ResponseEntity<?> getFornecedorPorPedidoCliente(@PathVariable int pedidoId) {
+        try{
+            return ResponseEntity.ok(fServ.getFornecedorPorPedidoCliente(pedidoId));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("cliente não encontrado!");
+        }
     }
-
 }

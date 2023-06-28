@@ -4,7 +4,9 @@ import com.modulodecompras.modulo.Model.Fornecedores;
 
 import com.modulodecompras.modulo.Model.Produtos;
 import com.modulodecompras.modulo.Services.dao.FornecedoresDao;
+import com.modulodecompras.modulo.Services.dao.ProdutoDao;
 import com.modulodecompras.modulo.Services.dto.FornecedorProdutoDTO;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,8 +28,11 @@ public class FornecedoresService {
     RestTemplate restTemplate;
     @Autowired
     FornecedoresDao fDao;
+    //@Autowired
+    //ProdutoService pServ;
+
     @Autowired
-    ProdutoService pServ;
+    ProdutoDao pDao;
 
     public Fornecedores saveF(Fornecedores fornecedores){return fDao.save(fornecedores);}
 
@@ -72,32 +77,46 @@ public class FornecedoresService {
         return fDao.save(f);
     }
 
-    public List<FornecedorProdutoDTO> getFornecedorPorPedidoCliente (int pedidoId) throws Exception {
+    public List<FornecedorProdutoDTO> getFornecedorPorPedidoCliente (int pedidoId) {
         restTemplate = new RestTemplate();
         String url = "http://backend-vendas-production.up.railway.app/pedido/buscar/" + pedidoId;
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         String json = response.getBody();
+            JsonReader jsonReader = Json.createReader(new StringReader(json));
+            JsonObject pedido = jsonReader.readObject();
+            JsonArray jsonArray = pedido.getJsonArray("itensPedido");
 
-        JsonReader jsonReader = Json.createReader(new StringReader(json));
+            List<FornecedorProdutoDTO> fornProdutoDTOs = new ArrayList<>();
 
-        JsonObject pedido = jsonReader.readObject();
-        JsonArray jsonArray = pedido.getJsonArray("itensPedido");
-
-        List<FornecedorProdutoDTO> fornProdutoDTOs = new ArrayList<>();
-
-        for (int i = 0; i < jsonArray.size(); i++) {
-            JsonObject jsonObject = jsonArray.getJsonObject(i);
-            JsonObject itemPedido = jsonObject.getJsonObject("itemPedido");
-            int idProduto = itemPedido.getInt("idProduto");
-            Produtos p = pServ.buscaProdutoPeloId(Long.valueOf(idProduto));
-            Fornecedores f = p.getFornecedores();
-
-            FornecedorProdutoDTO fornPedido = FornecedorProdutoDTO.builder()
-                    .nomeFornecedor(f.getNome())
-                    .nomeProduto(p.getNome())
-                    .build();
-            fornProdutoDTOs.add(fornPedido);
-        }
-        return fornProdutoDTOs;
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jsonObject = jsonArray.getJsonObject(0);
+                JsonObject itemPedido = jsonObject.getJsonObject("itemPedido");
+                int idProduto = itemPedido.getInt("idProduto");
+                Optional<Produtos> op = pDao.findById(Long.valueOf(idProduto));
+                Produtos p = null;
+                if (op.isPresent()) {
+                    p = op.get();
+                }
+                String nomeP = "";
+                String nomeF = "";
+                if (p == null) {
+                    nomeP = "Produto não encontrado";
+                } else {
+                    Fornecedores f = p.getFornecedores();
+                    if (f == null) {
+                        nomeF = "Fornecedor não encontrado";
+                    } else {
+                        nomeF = f.getNome();
+                    }
+                    nomeP = p.getNome();
+                }
+                FornecedorProdutoDTO fornPedido = FornecedorProdutoDTO.builder()
+                        .nomeFornecedor(nomeF)
+                        .nomeProduto(nomeP)
+                        .build();
+                fornProdutoDTOs.add(fornPedido);
+            }
+            jsonReader.close();
+            return fornProdutoDTOs;
     }
 }
