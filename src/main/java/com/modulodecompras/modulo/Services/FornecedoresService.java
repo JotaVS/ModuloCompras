@@ -77,11 +77,14 @@ public class FornecedoresService {
         return fDao.save(f);
     }
 
-    public List<FornecedorProdutoDTO> getFornecedorPorPedidoCliente (int pedidoId) {
+    public List<FornecedorProdutoDTO> getFornecedorPorPedidoCliente (int pedidoId) throws Exception {
         restTemplate = new RestTemplate();
         String url = "http://backend-vendas-production.up.railway.app/pedido/buscar/" + pedidoId;
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         String json = response.getBody();
+        if (json == null) {
+            throw new Exception("Pedido não encontrado!");
+        }
             JsonReader jsonReader = Json.createReader(new StringReader(json));
             JsonObject pedido = jsonReader.readObject();
             JsonArray jsonArray = pedido.getJsonArray("itensPedido");

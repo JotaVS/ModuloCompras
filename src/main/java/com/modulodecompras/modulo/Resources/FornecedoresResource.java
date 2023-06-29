@@ -75,7 +75,7 @@ public class FornecedoresResource {
         try{
             return ResponseEntity.ok(fServ.getFornecedorPorPedidoCliente(pedidoId));
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("cliente não encontrado!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }
