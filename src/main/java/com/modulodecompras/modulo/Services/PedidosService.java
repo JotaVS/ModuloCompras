@@ -139,10 +139,19 @@ public class PedidosService {
 
     public String alocarFuncionario(int idfuncionario, Long idpedido) {
         Optional<Pedido> ped = pedDao.findById(idpedido);
+        List<TrabalhadorDTO> funcionarios = getTrabalhadoresCompras();
+        List<Integer> matriculas = new ArrayList<>();
+        for (TrabalhadorDTO funcionario : funcionarios) {
+            matriculas.add(funcionario.getMatricula());
+        }
         Pedido pedido = ped.get();
-        pedido.setIdFuncionarioAlocado(idfuncionario);
-        pedDao.save(pedido);
-        return ("Funcionario com ID: "+idfuncionario+"! Alocado com sucesso ao Pedido de ID: "+idpedido+"!");
+        if (matriculas.contains(idfuncionario)) {
+            pedido.setIdFuncionarioAlocado(idfuncionario);
+            pedDao.save(pedido);
+            return "Funcionário com ID: " + idfuncionario + " alocado com sucesso ao Pedido de ID: " + idpedido + "!";
+        } else {
+            return "A matrícula do funcionário não está na lista de matrículas permitidas.";
+        }
     }
 
     public List<TrabalhadorDTO> getTrabalhadoresCompras(){
