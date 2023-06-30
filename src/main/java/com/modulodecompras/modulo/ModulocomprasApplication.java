@@ -59,6 +59,12 @@ public class ModulocomprasApplication implements CommandLineRunner {
 		p2.setFornecedores(f);
 		prodDao.save(p2);
 
+		Produtos p3 = new Produtos();
+		p3.setNome("epi");
+		p3.setValorUnidade(19.50f);
+		p3.setFornecedores(f);
+		prodDao.save(p3);
+
 		Estoque e = new Estoque();
 		e.setQuantidade(15);
 		e.setProdutos(p);
@@ -68,6 +74,11 @@ public class ModulocomprasApplication implements CommandLineRunner {
 		e2.setQuantidade(10);
 		e2.setProdutos(p2);
 		estDao.save(e2);
+
+		Estoque e3 = new Estoque();
+		e3.setQuantidade(10);
+		e3.setProdutos(p3);
+		estDao.save(e3);
 
 		Pedido ped = new Pedido();
 		ped.setValor(10);
@@ -82,10 +93,6 @@ public class ModulocomprasApplication implements CommandLineRunner {
 		pedDao.save(ped2);
 
 		//Fim
-
-
-
-
 
 	}
 }
